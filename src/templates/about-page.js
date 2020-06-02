@@ -4,7 +4,7 @@ import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Content, { HTMLContent } from '../components/Content'
 
-export const AboutPageTemplate = ({ title, content, contentComponent }) => {
+export const AboutPageTemplate = ({ title, content, contentComponent, firstSection }) => {
   const PageContent = contentComponent || Content
 
   return (
@@ -16,6 +16,11 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
               <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
                 {title}
               </h2>
+              <div>
+                <h2>{firstSection.title}</h2>
+                <h2>{firstSection.description}</h2>
+                <img src={firstSection.desktopImage} />
+              </div>
               <PageContent className="content" content={content} />
             </div>
           </div>
@@ -29,25 +34,38 @@ AboutPageTemplate.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string,
   contentComponent: PropTypes.func,
+  firstSection: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    desktopImage: PropTypes.string,
+    mobileImage: PropTypes.string,
+  }),
 }
 
 const AboutPage = ({ data }) => {
-  const { markdownRemark: post } = data
+  const {frontmatter} = data.markdownRemark;
+
+  console.log(frontmatter);
 
   return (
     <Layout>
       <AboutPageTemplate
         contentComponent={HTMLContent}
-        title={post.frontmatter.title}
-        content={post.html}
+        title={frontmatter.title}
+        content={frontmatter.html}
+        firstSection={frontmatter.firstSection}
       />
     </Layout>
   )
-}
+};
 
 AboutPage.propTypes = {
-  data: PropTypes.object.isRequired,
-}
+  data: PropTypes.shape({
+    markdownRemark: PropTypes.shape({
+      frontmatter: PropTypes.object,
+    }),
+  }),
+};
 
 export default AboutPage
 
@@ -57,6 +75,13 @@ export const aboutPageQuery = graphql`
       html
       frontmatter {
         title
+        firstSection {
+          public
+          title
+          description
+          desktopImage
+          mobileImage
+      }
       }
     }
   }

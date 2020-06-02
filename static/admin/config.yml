@@ -50,6 +50,7 @@ collections:
         fields:
           - {label: "Template Key", name: "templateKey", widget: "hidden", default: "about-page"}
           - {label: "Title", name: "title", widget: "string"}
+          - {label: "First Section", name: firstSection, widget: object, fields: [{label: "Public", name: "public", widget: "boolean", default: true}, {label: Title, name: title, widget: string}, {label: Description, name: description, widget: markdown}, {label: desktopImage, name: desktopImage, widget: image}, {label: mobileImage, name: mobileImage, widget: image}]}
           - {label: "Body", name: "body", widget: "markdown"}
       - file: "src/pages/products/index.md"
         label: "Products Page"
